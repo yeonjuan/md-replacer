@@ -1,11 +1,8 @@
 import type * as types from "./types";
 
 class BaseToken implements types.Token {
-  public type = 'unknown';
-  constructor(
-    public pos: types.Position,
-    public raw: string
-  ) {}
+  public type = "unknown";
+  constructor(public pos: types.Position, public raw: string) {}
 }
 
 class ReplaceStartToken extends BaseToken implements types.ReplaceStartToken {
@@ -46,28 +43,24 @@ class Tokenizer {
       if ((matched = remain.match(Tokenizer.REPLACE_START_REGEX))) {
         const [replaceStart, name] = matched;
         if (matched.index === 0) {
-          token = this.finishReplaceToken(
-            "replace-start",
-            replaceStart,
-            name.trim()
-          );
+          const pos = this.eatText(replaceStart);
+          token = new ReplaceStartToken(name.trim(), pos, replaceStart);
         } else {
           end = matched.index;
         }
       } else if ((matched = remain.match(Tokenizer.REPLACE_END_REGEX))) {
         const [replaceEnd, name] = matched;
         if (matched.index === 0) {
-          token = this.finishReplaceToken(
-            "replace-end",
-            replaceEnd,
-            name.trim()
-          );
+          const pos = this.eatText(replaceEnd);
+          token = new ReplaceEndToken(name.trim(), pos, replaceEnd);
         } else {
           end = matched.index;
         }
       }
       if (!token) {
-        token = this.finishOtherToken(this.remain().slice(0, end));
+        const raw = this.remain().slice(0, end);
+        const pos = this.eatText(raw);
+        token = new OtherToken(pos, raw);
       }
       this.pushToken(token);
     }
@@ -78,35 +71,16 @@ class Tokenizer {
     this.tokens.push(token);
   }
 
-  private finishOtherToken(raw: string): types.OtherToken {
-    const start = this.cursor();
-    this.eatText(raw);
-    const end = this.cursor();
-    return new OtherToken({ start, end }, raw);
-  }
-
-  private finishReplaceToken(
-    type: types.ReplaceToken["type"],
-    raw: string,
-    name: string
-  ): types.ReplaceToken {
-    const start = this.cursor();
-    this.eatText(raw);
-    const end = this.cursor();
-    const pos = { start, end };
-    if (type === "replace-start") {
-      return new ReplaceStartToken(name, pos, raw);
-    }
-    return new ReplaceEndToken(name, pos, raw);
-  }
-
   private cursor(): number {
     return this.index;
   }
 
-  private eatText(text: string): void {
+  private eatText(text: string): types.Position {
+    const start = this.cursor();
     this.index += text.length;
     this.input = this.input.slice(text.length);
+    const end = this.cursor();
+    return { start, end };
   }
 
   private remain(): string {
