@@ -1,18 +1,47 @@
-import type { AnyToken, OtherToken, ReplaceToken } from "./types";
+import type * as types from "./types";
+
+class BaseToken implements types.Token {
+  public type = 'unknown';
+  constructor(
+    public pos: types.Position,
+    public raw: string
+  ) {}
+}
+
+class ReplaceStartToken extends BaseToken implements types.ReplaceStartToken {
+  public type = "replace-start" as const;
+  constructor(public name: string, pos: types.Position, raw: string) {
+    super(pos, raw);
+  }
+}
+
+class ReplaceEndToken extends BaseToken implements types.ReplaceEndToken {
+  public type = "replace-end" as const;
+  constructor(public name: string, pos: types.Position, raw: string) {
+    super(pos, raw);
+  }
+}
+
+class OtherToken extends BaseToken implements types.OtherToken {
+  public type = "other" as const;
+  constructor(pos: types.Position, raw: string) {
+    super(pos, raw);
+  }
+}
 
 class Tokenizer {
   private static REPLACE_START_REGEX = /<!--\s*replace-start:([\s\S]*?)-->/;
   private static REPLACE_END_REGEX = /<!--\s*replace-end:([\s\S]*?)-->/;
   private index: number = 0;
-  private tokens: AnyToken[] = [];
+  private tokens: types.AnyToken[] = [];
   private input: string = "";
 
-  public tokenize(input: string): AnyToken[] {
+  public tokenize(input: string): types.AnyToken[] {
     this.input = input;
     let remain: string = "";
     while ((remain = this.remain()).length) {
       let matched = null;
-      let token: AnyToken | undefined;
+      let token: types.AnyToken | undefined;
       let end: number | undefined;
       if ((matched = remain.match(Tokenizer.REPLACE_START_REGEX))) {
         const [replaceStart, name] = matched;
@@ -45,43 +74,30 @@ class Tokenizer {
     return this.tokens;
   }
 
-  private pushToken(token: AnyToken) {
+  private pushToken(token: types.AnyToken) {
     this.tokens.push(token);
   }
 
-  private finishOtherToken(raw: string): OtherToken {
+  private finishOtherToken(raw: string): types.OtherToken {
     const start = this.cursor();
     this.eatText(raw);
     const end = this.cursor();
-    const token: OtherToken = {
-      type: "other",
-      raw,
-      pos: {
-        start,
-        end,
-      },
-    };
-    return token;
+    return new OtherToken({ start, end }, raw);
   }
 
   private finishReplaceToken(
-    type: ReplaceToken["type"],
+    type: types.ReplaceToken["type"],
     raw: string,
     name: string
-  ): ReplaceToken {
+  ): types.ReplaceToken {
     const start = this.cursor();
     this.eatText(raw);
     const end = this.cursor();
-    const token: ReplaceToken = {
-      type,
-      raw,
-      name,
-      pos: {
-        start: start,
-        end: end,
-      },
-    };
-    return token;
+    const pos = { start, end };
+    if (type === "replace-start") {
+      return new ReplaceStartToken(name, pos, raw);
+    }
+    return new ReplaceEndToken(name, pos, raw);
   }
 
   private cursor(): number {
@@ -98,7 +114,7 @@ class Tokenizer {
   }
 }
 
-function tokenize(input: string): AnyToken[] {
+function tokenize(input: string): types.AnyToken[] {
   return new Tokenizer().tokenize(input);
 }
 export = tokenize;

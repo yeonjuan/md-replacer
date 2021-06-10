@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tokenize tokenize - no replacer 1`] = `
+Array [
+  OtherToken {
+    "pos": Object {
+      "end": 9,
+      "start": 0,
+    },
+    "raw": "
+content
+",
+    "type": "other",
+  },
+]
+`;
+
+exports[`tokenize tokenize - one replacer 1`] = `
+Array [
+  OtherToken {
+    "pos": Object {
+      "end": 11,
+      "start": 0,
+    },
+    "raw": "
+content 1
+",
+    "type": "other",
+  },
+  ReplaceStartToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 38,
+      "start": 11,
+    },
+    "raw": "<!-- replace-start: foo -->",
+    "type": "replace-start",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 49,
+      "start": 38,
+    },
+    "raw": "
+content 2
+",
+    "type": "other",
+  },
+  ReplaceEndToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 74,
+      "start": 49,
+    },
+    "raw": "<!-- replace-end: foo -->",
+    "type": "replace-end",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 75,
+      "start": 74,
+    },
+    "raw": "
+",
+    "type": "other",
+  },
+]
+`;
+
+exports[`tokenize tokenize - two replacer 1`] = `
+Array [
+  OtherToken {
+    "pos": Object {
+      "end": 11,
+      "start": 0,
+    },
+    "raw": "
+content 1
+",
+    "type": "other",
+  },
+  ReplaceStartToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 38,
+      "start": 11,
+    },
+    "raw": "<!-- replace-start: foo -->",
+    "type": "replace-start",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 85,
+      "start": 38,
+    },
+    "raw": "
+content 2
+<!-- replace-end: foo -->
+content 3
+",
+    "type": "other",
+  },
+  ReplaceStartToken {
+    "name": "bar",
+    "pos": Object {
+      "end": 112,
+      "start": 85,
+    },
+    "raw": "<!-- replace-start: bar -->",
+    "type": "replace-start",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 123,
+      "start": 112,
+    },
+    "raw": "
+content 4
+",
+    "type": "other",
+  },
+  ReplaceEndToken {
+    "name": "bar",
+    "pos": Object {
+      "end": 148,
+      "start": 123,
+    },
+    "raw": "<!-- replace-end: bar -->",
+    "type": "replace-end",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 159,
+      "start": 148,
+    },
+    "raw": "
+content 5
+",
+    "type": "other",
+  },
+]
+`;

@@ -33,18 +33,20 @@ export interface BaseNode {
 }
 
 export interface TextNode extends BaseNode {
-  type: 'text';
+  type: "text";
   text: string;
 }
 
 export interface ReplacePartNode extends BaseNode {
-  type: 'replace-part';
+  type: "replace-part";
   start: ReplaceStartToken;
   end: ReplaceEndToken;
   children: TextNode[];
 }
 
-export interface Root extends BaseNode {
-  type: 'root';
+export interface RootNode extends BaseNode {
+  type: "root";
   children: (TextNode | ReplacePartNode)[];
 }
+
+export type AnyNode = TextNode | ReplacePartNode | RootNode;
