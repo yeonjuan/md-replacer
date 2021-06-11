@@ -1,0 +1,322 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parser parse - no replacer 1`] = `
+RootNode {
+  "children": Array [
+    TextNode {
+      "pos": Object {
+        "end": 9,
+        "start": 0,
+      },
+      "text": "
+content
+",
+      "type": "text",
+    },
+  ],
+  "pos": Object {
+    "end": 9,
+    "start": 0,
+  },
+  "type": "root",
+}
+`;
+
+exports[`parser parse - one replacer 1`] = `
+RootNode {
+  "children": Array [
+    TextNode {
+      "pos": Object {
+        "end": 11,
+        "start": 0,
+      },
+      "text": "
+content 1
+",
+      "type": "text",
+    },
+    ReplacePartNode {
+      "children": Array [
+        TextNode {
+          "pos": Object {
+            "end": 49,
+            "start": 38,
+          },
+          "text": "
+content 2
+",
+          "type": "text",
+        },
+      ],
+      "end": ReplaceEndToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 74,
+          "start": 49,
+        },
+        "raw": "<!-- replace-end: foo -->",
+        "type": "replace-end",
+      },
+      "name": "foo",
+      "pos": Object {
+        "end": 74,
+        "start": 11,
+      },
+      "start": ReplaceStartToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 38,
+          "start": 11,
+        },
+        "raw": "<!-- replace-start: foo -->",
+        "type": "replace-start",
+      },
+      "type": "replace-part",
+    },
+    TextNode {
+      "pos": Object {
+        "end": 75,
+        "start": 74,
+      },
+      "text": "
+",
+      "type": "text",
+    },
+  ],
+  "pos": Object {
+    "end": 75,
+    "start": 0,
+  },
+  "type": "root",
+}
+`;
+
+exports[`parser parse - two replace - same line 1`] = `
+RootNode {
+  "children": Array [
+    TextNode {
+      "pos": Object {
+        "end": 8,
+        "start": 0,
+      },
+      "text": "
+before
+",
+      "type": "text",
+    },
+    ReplacePartNode {
+      "children": Array [
+        TextNode {
+          "pos": Object {
+            "end": 40,
+            "start": 35,
+          },
+          "text": "
+foo
+",
+          "type": "text",
+        },
+      ],
+      "end": ReplaceEndToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 65,
+          "start": 40,
+        },
+        "raw": "<!-- replace-end: foo -->",
+        "type": "replace-end",
+      },
+      "name": "foo",
+      "pos": Object {
+        "end": 65,
+        "start": 8,
+      },
+      "start": ReplaceStartToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 35,
+          "start": 8,
+        },
+        "raw": "<!-- replace-start: foo -->",
+        "type": "replace-start",
+      },
+      "type": "replace-part",
+    },
+    TextNode {
+      "pos": Object {
+        "end": 72,
+        "start": 65,
+      },
+      "text": "between",
+      "type": "text",
+    },
+    ReplacePartNode {
+      "children": Array [
+        TextNode {
+          "pos": Object {
+            "end": 102,
+            "start": 99,
+          },
+          "text": "bar",
+          "type": "text",
+        },
+      ],
+      "end": ReplaceEndToken {
+        "name": "bar",
+        "pos": Object {
+          "end": 127,
+          "start": 102,
+        },
+        "raw": "<!-- replace-end: bar -->",
+        "type": "replace-end",
+      },
+      "name": "bar",
+      "pos": Object {
+        "end": 127,
+        "start": 72,
+      },
+      "start": ReplaceStartToken {
+        "name": "bar",
+        "pos": Object {
+          "end": 99,
+          "start": 72,
+        },
+        "raw": "<!-- replace-start: bar -->",
+        "type": "replace-start",
+      },
+      "type": "replace-part",
+    },
+    TextNode {
+      "pos": Object {
+        "end": 132,
+        "start": 127,
+      },
+      "text": "after",
+      "type": "text",
+    },
+  ],
+  "pos": Object {
+    "end": 132,
+    "start": 0,
+  },
+  "type": "root",
+}
+`;
+
+exports[`parser parse - two replacer 1`] = `
+RootNode {
+  "children": Array [
+    TextNode {
+      "pos": Object {
+        "end": 11,
+        "start": 0,
+      },
+      "text": "
+content 1
+",
+      "type": "text",
+    },
+    ReplacePartNode {
+      "children": Array [
+        TextNode {
+          "pos": Object {
+            "end": 49,
+            "start": 38,
+          },
+          "text": "
+content 2
+",
+          "type": "text",
+        },
+      ],
+      "end": ReplaceEndToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 74,
+          "start": 49,
+        },
+        "raw": "<!-- replace-end: foo -->",
+        "type": "replace-end",
+      },
+      "name": "foo",
+      "pos": Object {
+        "end": 74,
+        "start": 11,
+      },
+      "start": ReplaceStartToken {
+        "name": "foo",
+        "pos": Object {
+          "end": 38,
+          "start": 11,
+        },
+        "raw": "<!-- replace-start: foo -->",
+        "type": "replace-start",
+      },
+      "type": "replace-part",
+    },
+    TextNode {
+      "pos": Object {
+        "end": 85,
+        "start": 74,
+      },
+      "text": "
+content 3
+",
+      "type": "text",
+    },
+    ReplacePartNode {
+      "children": Array [
+        TextNode {
+          "pos": Object {
+            "end": 123,
+            "start": 112,
+          },
+          "text": "
+content 4
+",
+          "type": "text",
+        },
+      ],
+      "end": ReplaceEndToken {
+        "name": "bar",
+        "pos": Object {
+          "end": 148,
+          "start": 123,
+        },
+        "raw": "<!-- replace-end: bar -->",
+        "type": "replace-end",
+      },
+      "name": "bar",
+      "pos": Object {
+        "end": 148,
+        "start": 85,
+      },
+      "start": ReplaceStartToken {
+        "name": "bar",
+        "pos": Object {
+          "end": 112,
+          "start": 85,
+        },
+        "raw": "<!-- replace-start: bar -->",
+        "type": "replace-start",
+      },
+      "type": "replace-part",
+    },
+    TextNode {
+      "pos": Object {
+        "end": 159,
+        "start": 148,
+      },
+      "text": "
+content 5
+",
+      "type": "text",
+    },
+  ],
+  "pos": Object {
+    "end": 159,
+    "start": 0,
+  },
+  "type": "root",
+}
+`;

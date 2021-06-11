@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`md-replacer Inline 1`] = `"<!-- replace-start: foo -->foo<!-- replace-end: foo -->"`;
+
+exports[`md-replacer Mixed 1`] = `
+"
+before
+<!-- replace-start: foo -->
+foo
+<!-- replace-end: foo -->between<!-- replace-start: bar -->bar<!-- replace-end: bar -->after"
+`;
+
+exports[`md-replacer Multiline 1`] = `
+"
+<!-- replace-start: foo -->
+foo
+<!-- replace-end: foo -->"
+`;

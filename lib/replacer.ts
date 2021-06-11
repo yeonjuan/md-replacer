@@ -1,91 +1,67 @@
 import Pipe = require("./pipe");
 import createIndent = require("./create-indent");
+import parse = require("./parser");
+import nodes = require("./nodes");
+import type * as types from "./types";
 
 interface Context {
   indent: ReturnType<typeof createIndent>;
 }
 
-type ReplaceFunc = (ctx: Context) => string;
+type ReplaceFunc = (ctx?: Context) => string;
 
 class Replacer {
-  static START_INDENT_REGEX = /([ \t]*)<!--\s*replace-start:[\s\S]*?-->.*/;
-  static END_INDENT_REGEX = /([ \t]*)<!--\s*replace-end:[\s\S]*?-->.*/;
-  static INNER_CONTENT_REGEX =
-    /[ \t]*?<!--\s*replace-start:([\s\S]*?)-->([\s\S]*?)<!--\s*replace-end:([\s\S]*?)-->/g;
-
-  private pipe = new Pipe<(input: string) => string>();
-  constructor(private text: string) {}
+  private replacerMap: Record<string, ReplaceFunc> = {};
+  constructor(private ast: types.RootNode) {}
 
   public replace(name: string, replaceFunc: ReplaceFunc): this {
-    this.pipe.push((input) =>
-      this.replaceCommentPart(input, name, replaceFunc)
-    );
+    this.replacerMap[name] = replaceFunc;
     return this;
   }
 
-  public build(): string {
-    const pipeline = this.pipe.pipeline();
-    return pipeline(this.text);
+  public build() {
+    this.traverse(this.ast, (node) => {
+      if (node.type === "replace-part") {
+        const replacer = this.replacerMap[node.name];
+        if (typeof replacer === "function") {
+          const rets: string[] = [];
+          const hasNewLine = node.children.some(
+            (child) => child.text.indexOf("\n") !== -1
+          );
+          if (hasNewLine) {
+            rets.push("\n");
+          }
+          rets.push(replacer());
+          if (hasNewLine) {
+            rets.push("\n");
+          }
+          node.children = [
+            new nodes.TextNode(
+              {
+                start: node.start.pos.end,
+                end: node.end.pos.start - 1,
+              },
+              rets.join("")
+            ),
+          ];
+        }
+      }
+    });
+    return this.ast.stringify();
   }
 
-  private createContext(startCommentLine: string): Context {
-    const indentStr = startCommentLine.replace(
-      Replacer.START_INDENT_REGEX,
-      "$1"
-    );
-    return {
-      indent: createIndent(indentStr),
-    };
-  }
-
-  private replaceCommentPart(
-    text: string,
-    name: string,
-    replaceFunc: ReplaceFunc
-  ): string {
-    let replaced = text;
-    const allMatched = text.matchAll(Replacer.INNER_CONTENT_REGEX);
-    for (let [matched, startName, innerContent, endName] of allMatched) {
-      let matchedName = null;
-      const startTrimmed = startName.trim();
-      const endTrimmed = endName.trim();
-      if (startTrimmed === endTrimmed && startTrimmed === name) {
-        matchedName = name;
-      }
-      if (matchedName) {
-        const context = this.createContext(matched);
-        const endIndentStr = matched.replace(Replacer.END_INDENT_REGEX, "$1");
-        const isInline = innerContent.indexOf("\n") === -1;
-        const newLineOrEmpty = isInline ? "" : "\n";
-        replaced = replaced.replace(
-          matched,
-          matched.replace(
-            innerContent,
-            `${newLineOrEmpty}${replaceFunc(context)}${newLineOrEmpty}`
-          )
-        );
-      }
+  private traverse(
+    node: types.AnyNode | types.RootNode,
+    visitor: (node: types.AnyNode | types.RootNode) => void
+  ) {
+    visitor(node);
+    if (node.type === "root" || node.type === "replace-part") {
+      node.children.forEach((child) => this.traverse(child, visitor));
     }
-    return replaced;
   }
 }
 
 export = function create(text: string): Replacer {
-  return new Replacer(text);
+  const ast = parse(text);
+  return new Replacer(ast);
 };
-// 아이디어
-// 파싱을 먼저 한다
-/**
- * {
- *   name: string
- *   startComment: {
- *     start: number,
- *     end: number,
- *   },
- *   endComment {
- *     start: number,
- *     end: number
- *   },
- *   lines: string[]
- * }
- */

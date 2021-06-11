@@ -67,6 +67,91 @@ content 2
 ]
 `;
 
+exports[`tokenize tokenize - two replace - same line 1`] = `
+Array [
+  OtherToken {
+    "pos": Object {
+      "end": 8,
+      "start": 0,
+    },
+    "raw": "
+before
+",
+    "type": "other",
+  },
+  ReplaceStartToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 35,
+      "start": 8,
+    },
+    "raw": "<!-- replace-start: foo -->",
+    "type": "replace-start",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 40,
+      "start": 35,
+    },
+    "raw": "
+foo
+",
+    "type": "other",
+  },
+  ReplaceEndToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 65,
+      "start": 40,
+    },
+    "raw": "<!-- replace-end: foo -->",
+    "type": "replace-end",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 72,
+      "start": 65,
+    },
+    "raw": "between",
+    "type": "other",
+  },
+  ReplaceStartToken {
+    "name": "bar",
+    "pos": Object {
+      "end": 99,
+      "start": 72,
+    },
+    "raw": "<!-- replace-start: bar -->",
+    "type": "replace-start",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 102,
+      "start": 99,
+    },
+    "raw": "bar",
+    "type": "other",
+  },
+  ReplaceEndToken {
+    "name": "bar",
+    "pos": Object {
+      "end": 127,
+      "start": 102,
+    },
+    "raw": "<!-- replace-end: bar -->",
+    "type": "replace-end",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 132,
+      "start": 127,
+    },
+    "raw": "after",
+    "type": "other",
+  },
+]
+`;
+
 exports[`tokenize tokenize - two replacer 1`] = `
 Array [
   OtherToken {
@@ -90,12 +175,29 @@ content 1
   },
   OtherToken {
     "pos": Object {
-      "end": 85,
+      "end": 49,
       "start": 38,
     },
     "raw": "
 content 2
-<!-- replace-end: foo -->
+",
+    "type": "other",
+  },
+  ReplaceEndToken {
+    "name": "foo",
+    "pos": Object {
+      "end": 74,
+      "start": 49,
+    },
+    "raw": "<!-- replace-end: foo -->",
+    "type": "replace-end",
+  },
+  OtherToken {
+    "pos": Object {
+      "end": 85,
+      "start": 74,
+    },
+    "raw": "
 content 3
 ",
     "type": "other",

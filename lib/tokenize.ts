@@ -1,94 +1,99 @@
 import type * as types from "./types";
-
-class BaseToken implements types.Token {
-  public type = "unknown";
-  constructor(public pos: types.Position, public raw: string) {}
-}
-
-class ReplaceStartToken extends BaseToken implements types.ReplaceStartToken {
-  public type = "replace-start" as const;
-  constructor(public name: string, pos: types.Position, raw: string) {
-    super(pos, raw);
-  }
-}
-
-class ReplaceEndToken extends BaseToken implements types.ReplaceEndToken {
-  public type = "replace-end" as const;
-  constructor(public name: string, pos: types.Position, raw: string) {
-    super(pos, raw);
-  }
-}
-
-class OtherToken extends BaseToken implements types.OtherToken {
-  public type = "other" as const;
-  constructor(pos: types.Position, raw: string) {
-    super(pos, raw);
-  }
-}
+import tokens = require("./tokens");
 
 class Tokenizer {
-  private static REPLACE_START_REGEX = /<!--\s*replace-start:([\s\S]*?)-->/;
-  private static REPLACE_END_REGEX = /<!--\s*replace-end:([\s\S]*?)-->/;
-  private index: number = 0;
+  private static REPLACE_START_REGEX =
+    /^<!--[^\S\r\n]*replace-start:([\s^\S\r\n]*?)-->/;
+  private static REPLACE_END_REGEX =
+    /^<!--[^\S\r\n]*replace-end:([\s^\S\r\n]*?)-->/;
+  private cursorIndex: number = 0;
   private tokens: types.AnyToken[] = [];
   private input: string = "";
-
   public tokenize(input: string): types.AnyToken[] {
     this.input = input;
-    let remain: string = "";
-    while ((remain = this.remain()).length) {
+
+    while (!this.isEOF()) {
       let matched = null;
+      const remain = this.remain();
       let token: types.AnyToken | undefined;
-      let end: number | undefined;
+
       if ((matched = remain.match(Tokenizer.REPLACE_START_REGEX))) {
-        const [replaceStart, name] = matched;
-        if (matched.index === 0) {
-          const pos = this.eatText(replaceStart);
-          token = new ReplaceStartToken(name.trim(), pos, replaceStart);
-        } else {
-          end = matched.index;
-        }
+        token = this.tokenizeReplaceStart(matched);
       } else if ((matched = remain.match(Tokenizer.REPLACE_END_REGEX))) {
-        const [replaceEnd, name] = matched;
-        if (matched.index === 0) {
-          const pos = this.eatText(replaceEnd);
-          token = new ReplaceEndToken(name.trim(), pos, replaceEnd);
+        token = this.tokenizeReplaceEnd(matched);
+      }
+
+      const curChar = this.currentChar();
+
+      if (!token && curChar.length) {
+        const last = this.lastToken();
+        const pos = this.eatText(curChar);
+        if (last && last.type === "other") {
+          last.raw += curChar;
+          last.pos.end = pos.end;
         } else {
-          end = matched.index;
+          token = new tokens.OtherToken(pos, curChar);
         }
       }
-      if (!token) {
-        const raw = this.remain().slice(0, end);
-        const pos = this.eatText(raw);
-        token = new OtherToken(pos, raw);
+
+      if (token) {
+        this.pushToken(token);
       }
-      this.pushToken(token);
     }
+
     return this.tokens;
+  }
+
+  private tokenizeReplaceStart(
+    matched: NonNullable<ReturnType<String["match"]>>
+  ) {
+    const [replaceStart, name] = matched;
+    const pos = this.eatText(replaceStart);
+    return new tokens.ReplaceStartToken(name.trim(), pos, replaceStart);
+  }
+
+  private tokenizeReplaceEnd(
+    matched: NonNullable<ReturnType<String["match"]>>
+  ) {
+    const [replaceEnd, name] = matched;
+    const pos = this.eatText(replaceEnd);
+    return new tokens.ReplaceEndToken(name.trim(), pos, replaceEnd);
   }
 
   private pushToken(token: types.AnyToken) {
     this.tokens.push(token);
   }
 
+  private lastToken() {
+    return this.tokens[this.tokens.length - 1];
+  }
+
   private cursor(): number {
-    return this.index;
+    return this.cursorIndex;
+  }
+
+  private isEOF() {
+    return this.input.length <= this.cursor();
   }
 
   private eatText(text: string): types.Position {
     const start = this.cursor();
-    this.index += text.length;
-    this.input = this.input.slice(text.length);
+    this.cursorIndex += text.length;
     const end = this.cursor();
     return { start, end };
   }
 
+  private currentChar() {
+    return this.input[this.cursorIndex];
+  }
+
   private remain(): string {
-    return this.input;
+    return this.input.slice(this.cursor());
   }
 }
 
 function tokenize(input: string): types.AnyToken[] {
   return new Tokenizer().tokenize(input);
 }
+
 export = tokenize;

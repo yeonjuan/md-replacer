@@ -1,24 +1,24 @@
-import tokenize = require("./tokenize");
+import parse = require("./parser");
 
-describe("tokenize", () => {
-  it("tokenize - no replacer", () => {
+describe("parser", () => {
+  it("parse - no replacer", () => {
     const markdown = `
 content
 `;
-    expect(tokenize(markdown)).toMatchSnapshot();
+    expect(parse(markdown)).toMatchSnapshot();
   });
 
-  it("tokenize - one replacer", () => {
+  it("parse - one replacer", () => {
     const markdown = `
 content 1
 <!-- replace-start: foo -->
 content 2
 <!-- replace-end: foo -->
 `;
-    expect(tokenize(markdown)).toMatchSnapshot();
+    expect(parse(markdown)).toMatchSnapshot();
   });
 
-  it("tokenize - two replacer", () => {
+  it("parse - two replacer", () => {
     const markdown = `
 content 1
 <!-- replace-start: foo -->
@@ -30,15 +30,15 @@ content 4
 <!-- replace-end: bar -->
 content 5
 `;
-    expect(tokenize(markdown)).toMatchSnapshot();
+    expect(parse(markdown)).toMatchSnapshot();
   });
 
-  it("tokenize - two replace - same line", () => {
+  it("parse - two replace - same line", () => {
     const markdown = `
 before
 <!-- replace-start: foo -->
 foo
 <!-- replace-end: foo -->between<!-- replace-start: bar -->bar<!-- replace-end: bar -->after`;
-    expect(tokenize(markdown)).toMatchSnapshot();
+    expect(parse(markdown)).toMatchSnapshot();
   });
 });

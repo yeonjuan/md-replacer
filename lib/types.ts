@@ -30,6 +30,7 @@ export type AnyToken = OtherToken | ReplaceStartToken | ReplaceEndToken;
 export interface BaseNode {
   type: string;
   pos: Position;
+  stringify(): string;
 }
 
 export interface TextNode extends BaseNode {
@@ -39,6 +40,7 @@ export interface TextNode extends BaseNode {
 
 export interface ReplacePartNode extends BaseNode {
   type: "replace-part";
+  name: string;
   start: ReplaceStartToken;
   end: ReplaceEndToken;
   children: TextNode[];
@@ -49,4 +51,4 @@ export interface RootNode extends BaseNode {
   children: (TextNode | ReplacePartNode)[];
 }
 
-export type AnyNode = TextNode | ReplacePartNode | RootNode;
+export type AnyNode = TextNode | ReplacePartNode;
