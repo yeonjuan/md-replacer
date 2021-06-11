@@ -5,11 +5,9 @@
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
+    "noEmit": true,
     "skipLibCheck": true,
     "declaration": true,
-    "checkJs": false,
-    "rootDir": "lib"
-  },
-  "exclude": ["scripts"]
+    "checkJs": false
+  }
 }

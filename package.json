@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "format": "prettier --write .",
+    "format": "npm run build:doc && prettier --write .",
     "check": "prettier --list-different . && tsc --noEmit",
+    "build:doc": "ts-node ./scripts/build-readme",
     "build": "npm run check && rm -rf dist && tsc --build"
   },
   "repository": {
@@ -16,6 +17,7 @@
   "files": [
     "dist"
   ],
+  "types": "dist/index.d.ts",
   "author": "YeonJuAn",
   "license": "MIT",
   "bugs": {
