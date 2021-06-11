@@ -16,3 +16,12 @@ exports[`md-replacer Multiline 1`] = `
 foo
 <!-- replace-end: foo -->"
 `;
+
+exports[`md-replacer replace 1`] = `
+"
+before
+  <!-- replace-start: foo -->
+  foo
+  <!-- replace-end: foo -->
+ebd"
+`;

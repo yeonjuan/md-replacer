@@ -87,6 +87,10 @@ class Tokenizer {
     return this.input[this.cursorIndex];
   }
 
+  private nextChar() {
+    return this.input[this.cursor() + 1];
+  }
+
   private remain(): string {
     return this.input.slice(this.cursor());
   }

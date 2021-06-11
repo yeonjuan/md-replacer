@@ -30,7 +30,7 @@ export type AnyToken = OtherToken | ReplaceStartToken | ReplaceEndToken;
 export interface BaseNode {
   type: string;
   pos: Position;
-  stringify(): string;
+  stringify(parent?: AnyNode | RootNode): string;
 }
 
 export interface TextNode extends BaseNode {
@@ -52,3 +52,8 @@ export interface RootNode extends BaseNode {
 }
 
 export type AnyNode = TextNode | ReplacePartNode;
+
+export interface Context {
+  indent(input: string, level?: number): string;
+  setNode(node: ReplacePartNode): void;
+}

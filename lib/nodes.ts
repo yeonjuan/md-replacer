@@ -4,7 +4,7 @@ abstract class BaseNode implements types.BaseNode {
   public type = "unknown";
   constructor(public pos: types.Position) {}
 
-  abstract stringify(): string;
+  abstract stringify(parent?: types.AnyNode | types.RootNode): string;
 }
 
 class RootNode extends BaseNode implements types.RootNode {
@@ -17,7 +17,7 @@ class RootNode extends BaseNode implements types.RootNode {
   stringify() {
     const strings: string[] = [];
     this.children.forEach((child) => {
-      strings.push(child.stringify());
+      strings.push(child.stringify(this));
     });
     return strings.join("");
   }
@@ -29,7 +29,7 @@ class TextNode extends BaseNode implements types.TextNode {
     super(pos);
   }
 
-  stringify() {
+  stringify(parent: types.AnyNode | types.RootNode) {
     return this.text;
   }
 }
@@ -52,7 +52,7 @@ class ReplacePartNode extends BaseNode implements types.ReplacePartNode {
     const strings: string[] = [];
     strings.push(this.start.raw);
     this.children.forEach((child) => {
-      strings.push(child.stringify());
+      strings.push(child.stringify(this));
     });
     strings.push(this.end.raw);
     return strings.join("");

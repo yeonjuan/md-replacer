@@ -1,18 +1,22 @@
-import Pipe = require("./pipe");
 import createIndent = require("./create-indent");
 import parse = require("./parser");
 import nodes = require("./nodes");
+import createContext = require("./context");
 import type * as types from "./types";
+import nodeUtils = require("./node-utils");
 
-interface Context {
-  indent: ReturnType<typeof createIndent>;
+interface ReplacerContext {
+  indent: (input: string) => string;
 }
 
-type ReplaceFunc = (ctx?: Context) => string;
+type ReplaceFunc = (ctx: ReplacerContext) => string;
 
 class Replacer {
   private replacerMap: Record<string, ReplaceFunc> = {};
-  constructor(private ast: types.RootNode) {}
+  private context: types.Context;
+  constructor(private ast: types.RootNode) {
+    this.context = createContext(ast);
+  }
 
   public replace(name: string, replaceFunc: ReplaceFunc): this {
     this.replacerMap[name] = replaceFunc;
@@ -24,16 +28,28 @@ class Replacer {
       if (node.type === "replace-part") {
         const replacer = this.replacerMap[node.name];
         if (typeof replacer === "function") {
+          this.context.setNode(node);
           const rets: string[] = [];
+          let endIndent = "";
           const hasNewLine = node.children.some(
             (child) => child.text.indexOf("\n") !== -1
           );
           if (hasNewLine) {
+            if (node.children.length) {
+              endIndent = nodeUtils.getLastLineIndent(
+                node.children[node.children.length - 1]
+              );
+            }
             rets.push("\n");
           }
-          rets.push(replacer());
+          rets.push(
+            replacer({
+              indent: this.context.indent.bind(this.context),
+            })
+          );
           if (hasNewLine) {
             rets.push("\n");
+            rets.push(endIndent);
           }
           node.children = [
             new nodes.TextNode(

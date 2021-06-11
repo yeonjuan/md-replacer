@@ -35,4 +35,18 @@ aaa
       .build();
     expect(result).toMatchSnapshot();
   });
+
+  it("replace", () => {
+    const INPUT = `
+before
+  <!-- replace-start: foo -->
+  aaa
+  <!-- replace-end: foo -->
+ebd`;
+    const result = replacer()
+      .content(INPUT)
+      .replace("foo", ({ indent }) => indent("foo"))
+      .build();
+    expect(result).toMatchSnapshot();
+  });
 });
