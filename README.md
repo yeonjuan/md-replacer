@@ -16,7 +16,7 @@ $ npm install -D md-replacer
 
 ## Usage
 
-* README.md
+- README.md
 
 ```markdown
 <!-- start: name -->
@@ -24,25 +24,29 @@ $ npm install -D md-replacer
 <!-- start: name -->
 ```
 
-* example.js
-```js
-const replacer = require('md-replacer');
+- example.js
 
-const packageJSON = read('./package.json');
-const README = read('./README.md');
+```js
+const replacer = require("md-replacer");
+
+const packageJSON = read("./package.json");
+const README = read("./README.md");
 
 const output = replacer()
   .content(README)
-  .replace('name', () => `# ${name}`)
+  .replace("name", () => `# ${name}`)
   .build();
 
-write('./README.md', output);
+write("./README.md", output);
 ```
 
-* README.md
+- README.md
+
 ```markdown
 <!-- start: name -->
+
 # PROJECT
+
 <!-- start: name -->
 ```
 
