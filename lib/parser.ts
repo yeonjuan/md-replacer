@@ -1,7 +1,10 @@
 import tokenize = require("./tokenize");
 import createStack = require("./stack");
 import nodes = require("./nodes");
+import tokens = require("./tokens");
 import type * as types from "./types";
+
+const TOKEN_TYPES = tokens.TOKEN_TYPES;
 
 class Parser {
   private stack = createStack<types.AnyToken>();
@@ -16,13 +19,13 @@ class Parser {
     this.root = new nodes.RootNode({ start: 0, end: input.length });
     tokens.forEach((token) => {
       switch (token.type) {
-        case "replace-start":
+        case TOKEN_TYPES.REPLACE_START:
           this.onReplaceStart(token);
           break;
-        case "replace-end":
+        case TOKEN_TYPES.REPLACE_END:
           this.onReplaceEnd(token);
           break;
-        case "other":
+        case TOKEN_TYPES.OTHER:
           this.onOther(token);
           break;
         default:
@@ -50,7 +53,7 @@ class Parser {
     const isReplaceStart = (
       top: types.AnyToken
     ): top is types.ReplaceStartToken =>
-      top.type === "replace-start" && top.name === token.name;
+      top.type === TOKEN_TYPES.REPLACE_START && top.name === token.name;
     const tokens = this.popTokensUntil(isReplaceStart).reverse();
     const top = this.stack.top();
     const children: types.AnyNode[] = [];

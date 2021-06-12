@@ -30,16 +30,16 @@ content 1
   ReplaceStartToken {
     "name": "foo",
     "pos": Object {
-      "end": 38,
+      "end": 30,
       "start": 11,
     },
-    "raw": "<!-- replace-start: foo -->",
+    "raw": "<!-- start: foo -->",
     "type": "replace-start",
   },
   OtherToken {
     "pos": Object {
-      "end": 49,
-      "start": 38,
+      "end": 41,
+      "start": 30,
     },
     "raw": "
 content 2
@@ -49,16 +49,16 @@ content 2
   ReplaceEndToken {
     "name": "foo",
     "pos": Object {
-      "end": 74,
-      "start": 49,
+      "end": 58,
+      "start": 41,
     },
-    "raw": "<!-- replace-end: foo -->",
+    "raw": "<!-- end: foo -->",
     "type": "replace-end",
   },
   OtherToken {
     "pos": Object {
-      "end": 75,
-      "start": 74,
+      "end": 59,
+      "start": 58,
     },
     "raw": "
 ",
@@ -82,16 +82,16 @@ before
   ReplaceStartToken {
     "name": "foo",
     "pos": Object {
-      "end": 35,
+      "end": 27,
       "start": 8,
     },
-    "raw": "<!-- replace-start: foo -->",
+    "raw": "<!-- start: foo -->",
     "type": "replace-start",
   },
   OtherToken {
     "pos": Object {
-      "end": 40,
-      "start": 35,
+      "end": 32,
+      "start": 27,
     },
     "raw": "
 foo
@@ -101,16 +101,16 @@ foo
   ReplaceEndToken {
     "name": "foo",
     "pos": Object {
-      "end": 65,
-      "start": 40,
+      "end": 49,
+      "start": 32,
     },
-    "raw": "<!-- replace-end: foo -->",
+    "raw": "<!-- end: foo -->",
     "type": "replace-end",
   },
   OtherToken {
     "pos": Object {
-      "end": 72,
-      "start": 65,
+      "end": 56,
+      "start": 49,
     },
     "raw": "between",
     "type": "other",
@@ -118,16 +118,16 @@ foo
   ReplaceStartToken {
     "name": "bar",
     "pos": Object {
-      "end": 99,
-      "start": 72,
+      "end": 75,
+      "start": 56,
     },
-    "raw": "<!-- replace-start: bar -->",
+    "raw": "<!-- start: bar -->",
     "type": "replace-start",
   },
   OtherToken {
     "pos": Object {
-      "end": 102,
-      "start": 99,
+      "end": 78,
+      "start": 75,
     },
     "raw": "bar",
     "type": "other",
@@ -135,16 +135,16 @@ foo
   ReplaceEndToken {
     "name": "bar",
     "pos": Object {
-      "end": 127,
-      "start": 102,
+      "end": 95,
+      "start": 78,
     },
-    "raw": "<!-- replace-end: bar -->",
+    "raw": "<!-- end: bar -->",
     "type": "replace-end",
   },
   OtherToken {
     "pos": Object {
-      "end": 132,
-      "start": 127,
+      "end": 100,
+      "start": 95,
     },
     "raw": "after",
     "type": "other",
@@ -167,16 +167,16 @@ content 1
   ReplaceStartToken {
     "name": "foo",
     "pos": Object {
-      "end": 38,
+      "end": 30,
       "start": 11,
     },
-    "raw": "<!-- replace-start: foo -->",
+    "raw": "<!-- start: foo -->",
     "type": "replace-start",
   },
   OtherToken {
     "pos": Object {
-      "end": 49,
-      "start": 38,
+      "end": 41,
+      "start": 30,
     },
     "raw": "
 content 2
@@ -186,16 +186,16 @@ content 2
   ReplaceEndToken {
     "name": "foo",
     "pos": Object {
-      "end": 74,
-      "start": 49,
+      "end": 58,
+      "start": 41,
     },
-    "raw": "<!-- replace-end: foo -->",
+    "raw": "<!-- end: foo -->",
     "type": "replace-end",
   },
   OtherToken {
     "pos": Object {
-      "end": 85,
-      "start": 74,
+      "end": 69,
+      "start": 58,
     },
     "raw": "
 content 3
@@ -205,16 +205,16 @@ content 3
   ReplaceStartToken {
     "name": "bar",
     "pos": Object {
-      "end": 112,
-      "start": 85,
+      "end": 88,
+      "start": 69,
     },
-    "raw": "<!-- replace-start: bar -->",
+    "raw": "<!-- start: bar -->",
     "type": "replace-start",
   },
   OtherToken {
     "pos": Object {
-      "end": 123,
-      "start": 112,
+      "end": 99,
+      "start": 88,
     },
     "raw": "
 content 4
@@ -224,16 +224,16 @@ content 4
   ReplaceEndToken {
     "name": "bar",
     "pos": Object {
-      "end": 148,
-      "start": 123,
+      "end": 116,
+      "start": 99,
     },
-    "raw": "<!-- replace-end: bar -->",
+    "raw": "<!-- end: bar -->",
     "type": "replace-end",
   },
   OtherToken {
     "pos": Object {
-      "end": 159,
-      "start": 148,
+      "end": 127,
+      "start": 116,
     },
     "raw": "
 content 5

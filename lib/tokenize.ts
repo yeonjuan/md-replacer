@@ -3,9 +3,8 @@ import tokens = require("./tokens");
 
 class Tokenizer {
   private static REPLACE_START_REGEX =
-    /^<!--[^\S\r\n]*replace-start:([\s^\S\r\n]*?)-->/;
-  private static REPLACE_END_REGEX =
-    /^<!--[^\S\r\n]*replace-end:([\s^\S\r\n]*?)-->/;
+    /^<!--[^\S\r\n]*start:([\s^\S\r\n]*?)-->/;
+  private static REPLACE_END_REGEX = /^<!--[^\S\r\n]*end:([\s^\S\r\n]*?)-->/;
   private cursorIndex: number = 0;
   private tokens: types.AnyToken[] = [];
   private input: string = "";

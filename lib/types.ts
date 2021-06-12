@@ -4,7 +4,7 @@ export interface Position {
 }
 
 export interface Token {
-  type: string;
+  type?: string;
   pos: Position;
   raw: string;
 }

@@ -1,22 +1,54 @@
-<!-- replace-start:name -->
+<!-- start:name -->
 
 # md-replacer
 
-<!-- replace-end:name -->
+<!-- end:name -->
 
 ## Installation
 
-<!-- replace-start: install -->
+<!-- start: install -->
 
 ```bash
 $ npm install -D md-replacer
 ```
 
-<!-- replace-end: install -->
+<!-- end: install -->
+
+## Usage
+
+* README.md
+
+```markdown
+<!-- start: name -->
+
+<!-- start: name -->
+```
+
+* example.js
+```js
+const replacer = require('md-replacer');
+
+const packageJSON = read('./package.json');
+const README = read('./README.md');
+
+const output = replacer()
+  .content(README)
+  .replace('name', () => `# ${name}`)
+  .build();
+
+write('./README.md', output);
+```
+
+* README.md
+```markdown
+<!-- start: name -->
+# PROJECT
+<!-- start: name -->
+```
 
 ## License
 
-<!-- replace-start: license -->
+<!-- start: license -->
 
 - MIT
-<!-- replace-end: license -->
+<!-- end: license -->

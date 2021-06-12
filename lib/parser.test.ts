@@ -11,9 +11,9 @@ content
   it("parse - one replacer", () => {
     const markdown = `
 content 1
-<!-- replace-start: foo -->
+<!-- start: foo -->
 content 2
-<!-- replace-end: foo -->
+<!-- end: foo -->
 `;
     expect(parse(markdown)).toMatchSnapshot();
   });
@@ -21,13 +21,13 @@ content 2
   it("parse - two replacer", () => {
     const markdown = `
 content 1
-<!-- replace-start: foo -->
+<!-- start: foo -->
 content 2
-<!-- replace-end: foo -->
+<!-- end: foo -->
 content 3
-<!-- replace-start: bar -->
+<!-- start: bar -->
 content 4
-<!-- replace-end: bar -->
+<!-- end: bar -->
 content 5
 `;
     expect(parse(markdown)).toMatchSnapshot();
@@ -36,9 +36,9 @@ content 5
   it("parse - two replace - same line", () => {
     const markdown = `
 before
-<!-- replace-start: foo -->
+<!-- start: foo -->
 foo
-<!-- replace-end: foo -->between<!-- replace-start: bar -->bar<!-- replace-end: bar -->after`;
+<!-- end: foo -->between<!-- start: bar -->bar<!-- end: bar -->after`;
     expect(parse(markdown)).toMatchSnapshot();
   });
 });

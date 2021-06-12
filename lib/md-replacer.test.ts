@@ -2,7 +2,7 @@ import replacer = require("./md-replacer");
 
 describe("md-replacer", () => {
   it("Inline", () => {
-    const INPUT = "<!-- replace-start: foo -->aaa <!-- replace-end: foo -->";
+    const INPUT = "<!-- start: foo -->aaa <!-- end: foo -->";
     const result = replacer()
       .content(INPUT)
       .replace("foo", () => "foo")
@@ -12,9 +12,9 @@ describe("md-replacer", () => {
 
   it("Multiline", () => {
     const INPUT = `
-<!-- replace-start: foo -->
+<!-- start: foo -->
 aaa
-<!-- replace-end: foo -->`;
+<!-- end: foo -->`;
     const result = replacer()
       .content(INPUT)
       .replace("foo", () => "foo")
@@ -25,9 +25,9 @@ aaa
   it("Mixed", () => {
     const INPUT = `
 before
-<!-- replace-start: foo -->
+<!-- start: foo -->
 aaa
-<!-- replace-end: foo -->between<!-- replace-start: bar -->aaa<!-- replace-end: bar -->after`;
+<!-- end: foo -->between<!-- start: bar -->aaa<!-- end: bar -->after`;
     const result = replacer()
       .content(INPUT)
       .replace("foo", () => "foo")
@@ -39,9 +39,9 @@ aaa
   it("replace", () => {
     const INPUT = `
 before
-  <!-- replace-start: foo -->
+  <!-- start: foo -->
   aaa
-  <!-- replace-end: foo -->
+  <!-- end: foo -->
 ebd`;
     const result = replacer()
       .content(INPUT)

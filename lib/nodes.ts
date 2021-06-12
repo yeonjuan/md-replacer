@@ -1,14 +1,21 @@
 import type * as types from "./types";
 
+const NODE_TYPES = {
+  UNKNOWN: "unknown",
+  ROOT: "root",
+  TEXT: "text",
+  REPLACE_PART: "replace-part",
+} as const;
+
 abstract class BaseNode implements types.BaseNode {
-  public type = "unknown";
+  public type = "";
   constructor(public pos: types.Position) {}
 
   abstract stringify(parent?: types.AnyNode | types.RootNode): string;
 }
 
 class RootNode extends BaseNode implements types.RootNode {
-  public readonly type: types.RootNode["type"] = "root";
+  public readonly type = NODE_TYPES.ROOT;
   public readonly children: types.RootNode["children"] = [];
   constructor(pos: types.Position) {
     super(pos);
@@ -24,7 +31,7 @@ class RootNode extends BaseNode implements types.RootNode {
 }
 
 class TextNode extends BaseNode implements types.TextNode {
-  public readonly type: types.TextNode["type"] = "text";
+  public readonly type = NODE_TYPES.TEXT;
   constructor(pos: types.Position, public text: string) {
     super(pos);
   }
@@ -35,7 +42,7 @@ class TextNode extends BaseNode implements types.TextNode {
 }
 
 class ReplacePartNode extends BaseNode implements types.ReplacePartNode {
-  public readonly type: types.ReplacePartNode["type"] = "replace-part";
+  public readonly type = NODE_TYPES.REPLACE_PART;
   public readonly children: types.ReplacePartNode["children"] = [];
   constructor(
     public start: types.ReplaceStartToken,
@@ -64,4 +71,5 @@ export = {
   RootNode,
   TextNode,
   ReplacePartNode,
+  NODE_TYPES,
 };
